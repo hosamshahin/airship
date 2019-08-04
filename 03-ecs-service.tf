@@ -2,7 +2,7 @@ module "fargate_service" {
   source  = "blinkist/airship-ecs-service/aws"
   version = "0.9.2"
 
-  name = "demo-web"
+  name = "demo"
 
   ecs_cluster_id = "${module.ecs.cluster_id}"
 
