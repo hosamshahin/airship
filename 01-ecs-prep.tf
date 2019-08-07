@@ -1,8 +1,6 @@
 provider "aws" {
   region = "us-east-1"
 }
-
-# VPC Definition
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "1.46.0"
@@ -14,12 +12,13 @@ module "vpc" {
   public_subnets  = ["10.50.11.0/24", "10.50.12.0/24"]
   private_subnets = ["10.50.21.0/24", "10.50.22.0/24"]
 
+  single_nat_gateway = true
+
   enable_nat_gateway   = true
-  single_nat_gateway   = true
   enable_vpn_gateway   = false
   enable_dns_hostnames = true
 
-  tags {
+  tags = {
     Terraform = "true"
   }
 }
@@ -80,7 +79,7 @@ resource "aws_security_group" "ecs_service_sg" {
 }
 
 data "aws_route53_zone" "zone" {
-  name = "web.nis.could.vt.edu."
+  name = "web.nis.cloud.vt.edu."
 }
 
 module "lb_s3_bucket" {
@@ -88,7 +87,7 @@ module "lb_s3_bucket" {
   version       = "0.1.4"
   namespace     = "dcr"
   stage         = "test"
-  name          = "lb-s3-bucket-98749234phwhfkjsdhfwer"
+  name          = "lb-s3-bucket-kjsdflowiurkj"
   region        = "us-east-1"
   force_destroy = "true"
 }
@@ -96,7 +95,7 @@ module "lb_s3_bucket" {
 module "alb_shared_services_external" {
   source                    = "terraform-aws-modules/alb/aws"
   version                   = "3.4.0"
-  load_balancer_name        = "ecs-lb"
+  load_balancer_name        = "ecs-external"
   security_groups           = ["${aws_security_group.lb_sg.id}"]
   load_balancer_is_internal = false
   log_bucket_name           = "${module.lb_s3_bucket.bucket_id}"

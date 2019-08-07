@@ -2,7 +2,7 @@ module "fargate_service" {
   source  = "blinkist/airship-ecs-service/aws"
   version = "0.9.2"
 
-  name = "demo"
+  name = "nginx"
 
   ecs_cluster_id = "${module.ecs.cluster_id}"
 
@@ -25,6 +25,7 @@ module "fargate_service" {
   # The VPC_ID the target_group is being created in
   load_balancing_properties_lb_vpc_id = "${module.vpc.vpc_id}"
 
+  # load_balancing_properties_route53_record_type = "NONE"
   # The route53 zone for which we create a subdomain
   load_balancing_properties_route53_zone_id = "${data.aws_route53_zone.zone.zone_id}"
 
@@ -53,5 +54,5 @@ module "fargate_service" {
   # defaults to 2
   # With scaling enabled, desired_min_capacity and desired_max_capacity 
   # define the lower and upper boundary in task size
-  capacity_properties_desired_capacity = "1"
+  capacity_properties_desired_capacity = "2"
 }
